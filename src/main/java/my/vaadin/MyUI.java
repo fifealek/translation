@@ -33,8 +33,8 @@ import static java.util.stream.Collectors.toList;
 @Theme("valo")
 public class MyUI extends UI {
 
-    @Resource
-    private DaoService daoService;
+//    @Resource
+//    private DaoService daoService;
 
     @Resource
     private RepositoryForeiginWords repository;
@@ -66,68 +66,68 @@ public class MyUI extends UI {
         setContent(verticalLayout);
     }
 
-    private String getMessage() {
-        String message = "null";
-        Session session = null;
-        try {
-            UserTransaction tx = daoService.getuserTransaction();
-            tx.begin();
-            session = daoService.getSessionFactory().getCurrentSession();
-            List<Foreignwords> list = session.createCriteria(Foreignwords.class).list();
-            if (list.size() > 0) {
-                message = list.get(0).getForeignWord();
-            }
-            tx.commit();
+//    private String getMessage() {
+//        String message = "null";
+//        Session session = null;
+//        try {
+//            UserTransaction tx = daoService.getuserTransaction();
+//            tx.begin();
+//            session = daoService.getSessionFactory().getCurrentSession();
+//            List<Foreignwords> list = session.createCriteria(Foreignwords.class).list();
+//            if (list.size() > 0) {
+//                message = list.get(0).getForeignWord();
+//            }
+//            tx.commit();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            //daoService.rollback();
+//        } finally {
+//            if (session != null) {
+//                session.close();
+//            }
+//        }
+//        return message;
+//    }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            //daoService.rollback();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        return message;
-    }
+//    private List getForeignWords() {
+//        List<Foreignwords> list = Collections.EMPTY_LIST;
+//        Session session = null;
+//        try {
+//            UserTransaction tx = daoService.getuserTransaction();
+//            tx.begin();
+//            session = daoService.getSessionFactory().getCurrentSession();
+//            list = session.createCriteria(Foreignwords.class).list();
+//            tx.commit();
+//            session.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            //daoService.rollback();
+//        } finally {
+//            if (session != null) {
+//                session.close();
+//            }
+//        }
+//        return list;
+//    }
 
-    private List getForeignWords() {
-        List<Foreignwords> list = Collections.EMPTY_LIST;
-        Session session = null;
-        try {
-            UserTransaction tx = daoService.getuserTransaction();
-            tx.begin();
-            session = daoService.getSessionFactory().getCurrentSession();
-            list = session.createCriteria(Foreignwords.class).list();
-            tx.commit();
-            session.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            //daoService.rollback();
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-        return list;
-    }
-
-    public List<Foreignwords> getList() {
-        UserTransaction tx = daoService.getuserTransaction();
-        EntityManager entityManager = daoService.createEntityManager();
-        List<Foreignwords> list = Collections.EMPTY_LIST;
-        try {
-            tx.begin();
-            list = entityManager.createQuery("select f from Foreignwords f").getResultList();
-            tx.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            daoService.rollback();
-        } finally {
-            entityManager.close();
-        }
-
-        return list;
-    }
+//    public List<Foreignwords> getList() {
+//        UserTransaction tx = daoService.getuserTransaction();
+//        EntityManager entityManager = daoService.createEntityManager();
+//        List<Foreignwords> list = Collections.EMPTY_LIST;
+//        try {
+//            tx.begin();
+//            list = entityManager.createQuery("select f from Foreignwords f").getResultList();
+//            tx.commit();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            daoService.rollback();
+//        } finally {
+//            entityManager.close();
+//        }
+//
+//        return list;
+//    }
 
     public void updateGrid()
     {

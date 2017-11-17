@@ -13,7 +13,7 @@ import javax.transaction.UserTransaction;
 import static my.hibernate.config.HibernateConfig.createSessionFactory;
 import static my.hibernate.config.HibernateConfig.getUserTransaction;
 
-@Service("dao")
+//@Service("dao")
 public class DaoServiceImpl implements DaoService {
     @Override
     public SessionFactory getSessionFactory() {

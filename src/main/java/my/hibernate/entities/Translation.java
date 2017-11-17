@@ -5,9 +5,11 @@ import javax.persistence.*;
 @Entity
 public class Translation {
 
-    @Id
-    @GeneratedValue(generator = Generators.ID_GENERATOR)
-    private Long ID;
+  //  @Id
+  //  @GeneratedValue(generator = Generators.ID_GENERATOR)
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long ID;
 
     private String translateWord;
 
