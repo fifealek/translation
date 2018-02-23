@@ -40,4 +40,17 @@ public class RepositoryForeiginWordsImpl implements RepositoryForeiginWords {
         //entityManager.persist(word);
         entityManager.merge(word);
     }
+
+    @Override
+    public Foreignwords find(Object id) {
+        Foreignwords foreignwords = null;
+        try {
+            foreignwords = (Foreignwords) entityManager.createQuery("select f from Foreignwords f where f.id =:id").setParameter("id", id).getSingleResult();
+        } catch (NoResultException e) {
+            e.printStackTrace();
+        } catch (NonUniqueResultException e) {
+            e.printStackTrace();
+        }
+        return foreignwords;
+    }
 }

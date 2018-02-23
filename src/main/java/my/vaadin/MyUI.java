@@ -1,23 +1,17 @@
 package my.vaadin;
 
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.transaction.UserTransaction;
-
 import com.vaadin.annotations.Theme;
+import com.vaadin.navigator.Navigator;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
-import my.component.DaoService;
 import my.component.converte.Converter;
 import my.component.repository.RepositoryForeiginWords;
 import my.form.binders.entities.ForeignWordTable;
 import my.hibernate.entities.Foreignwords;
-import org.hibernate.Session;
-import org.springframework.stereotype.Component;
+import my.hibernate.entities.User;
 
 
-import java.util.Collections;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -30,40 +24,41 @@ import static java.util.stream.Collectors.toList;
  * overridden to add component to the user interface and initialize non-component functionality.
  */
 @SpringUI
-@Theme("valo")
-public class MyUI extends UI {
+//@Theme("valo")
+@Theme("mytheme")
+public class MyUI extends BaseUIWindow {
 
 //    @Resource
 //    private DaoService daoService;
 
-    @Resource
-    private RepositoryForeiginWords repository;
 
-    @Resource
-    private Converter converter;
 
+
+
+    private LoginUI loginUI=new LoginUI(this);
+
+    private RegistrationView registrationView = new RegistrationView(this);
+    protected Navigator navigator;
     private Grid<ForeignWordTable> grid = new Grid(ForeignWordTable.class);
+    private GridTranslateWords gridTranslateWords = new GridTranslateWords(this,grid);
 
-
-    private ForeignWordForm foreignWordForm = new ForeignWordForm(this);
 
     @Override
     protected void init(VaadinRequest request) {
-        VerticalLayout verticalLayout = new VerticalLayout();
-        grid.setColumns("ID", "foreign","translation");
-        grid.setSizeUndefined();
-        HorizontalLayout main = new HorizontalLayout();
-        main.addComponents(grid, foreignWordForm);
-        main.setSizeFull();
-        grid.setSizeFull();
-        main.setExpandRatio(grid, 1);
-        if (repository != null) {
-            updateGrid();
+         navigator = new Navigator(this, this);;
+
+        navigator.addView("Login",loginUI);
+        navigator.addView(Views.REGISTRATION.name(),registrationView);
+        navigator.addView(Views.TRANSLATION.name(), gridTranslateWords);
+        if(!isUserLoginIn(getCookie())){
+           //navigator.addView("Login",loginUI);
+           navigator.navigateTo("Login");
+            return;
+        }else {
+            updateGrid(null);
+            navigator.navigateTo(Views.TRANSLATION.name());
         }
-        //String m = getMessage();
-//        setContent(new Button("Click me", e -> Notification.show(m + " Hello Spring+Vaadin user!")));
-        verticalLayout.addComponent(main);
-        setContent(verticalLayout);
+
     }
 
 //    private String getMessage() {
@@ -129,13 +124,29 @@ public class MyUI extends UI {
 //        return list;
 //    }
 
-    public void updateGrid()
-    {
-        grid.setItems(
+    public void updateGrid(String email) {
+        User user = null;
+        if (email == null) {
+            user = getCurrentUser();
+        } else {
+            user = getCurrentUser(email);
+        }
+
+        if (user != null && user.getForeignwords() != null) {
+            user = repositoryUser.getUser(user.getEmail());
+            grid.setItems(
+                (List) user.getForeignwords().stream().
+                    map(t -> new ForeignWordTable((Foreignwords) t)).
+                    collect(toList())
+            );
+
+        } else {
+            grid.setItems(
                 (List) repository.findAll().stream().
-                        map( t-> new ForeignWordTable((Foreignwords)t)).
-                        collect(toList())
-        );
+                    map(t -> new ForeignWordTable((Foreignwords) t)).
+                    collect(toList())
+            );
+        }
     }
 
     public RepositoryForeiginWords getRepository() {
@@ -152,5 +163,27 @@ public class MyUI extends UI {
 
     public void setConverter(Converter converter) {
         this.converter = converter;
+    }
+
+    public void changView(Views views){
+        navigator.navigateTo(views.name());
+    }
+
+    public void createUser(String email, String password, String name, String secondname) {
+        User newUser = new User(email, password, name, secondname);
+        repositoryUser.save(newUser);
+    }
+
+    public void editView(ForeignWordTable foreignWordTable) {
+        if (foreignWordTable != null) {
+            Long id = foreignWordTable.getID();
+            Foreignwords foreignwords = repository.find(id);
+            if (foreignwords != null) {
+                navigator.removeView(Views.EDIT.name());
+                EditDinamicView editView = new EditDinamicView(foreignwords, this);
+                navigator.addView(Views.EDIT.name(), editView);
+                changView(Views.EDIT);
+            }
+        }
     }
 }

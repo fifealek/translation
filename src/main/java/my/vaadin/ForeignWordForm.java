@@ -4,14 +4,10 @@ import com.vaadin.data.Binder;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import my.component.converte.Converter;
-import my.component.repository.RepositoryForeiginWords;
 import my.form.binders.entities.ForeignWordData;
 import my.hibernate.entities.Foreignwords;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import my.hibernate.entities.User;
 
-import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -63,16 +59,20 @@ public class ForeignWordForm extends FormLayout {
     }
 
     public void save() {
+        User user = myUI.getCurrentUser();
         Foreignwords foreignwords = myUI.getRepository().find(foreignWordData.getForeignWord());
-        if (foreignwords != null) {
-            Foreignwords foreignwordsNew = (Foreignwords) myUI.getConverter().convert(foreignwords, foreignWordData);
-            myUI.getRepository().save(foreignwordsNew);
-        } else {
-            myUI.getRepository().save(myUI.getConverter().convert(new Foreignwords(), foreignWordData));
+
+        if (foreignwords == null) {
+            foreignwords = new Foreignwords();
         }
 
-        myUI.updateGrid();
+        foreignwords = (Foreignwords) myUI.getConverter().convert(foreignwords, foreignWordData);
+        foreignwords.getUsers().add(user);
+        user.getForeignwords().add(foreignwords);
+        myUI.getRepository().save(foreignwords);
+        myUI.updateGrid(null);
         System.out.println(foreignWordData);
+        clean();
     }
 
     public void cancel() {
@@ -85,5 +85,10 @@ public class ForeignWordForm extends FormLayout {
                 .map(Locale::getDisplayLanguage)
                 .collect(Collectors.toCollection(TreeSet::new));
         return languages;
+    }
+
+    private void clean(){
+        foreignWord.setValue("");
+        translationWord.setValue("");
     }
 }

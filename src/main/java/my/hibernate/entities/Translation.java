@@ -17,6 +17,12 @@ public class Translation {
     @JoinColumn(name = "foreignwords_id",nullable = false)
     private Foreignwords foreignwords;
 
+    @Lob
+    private byte[] translateWordBytes;
+
+    @Lob
+    private String translateWordLong;
+
     public Translation() {
     }
 
@@ -24,9 +30,10 @@ public class Translation {
         this.translateWord = translateWord;
     }
 
-    public Translation(String translateWord, Foreignwords foreignwords) {
+    public Translation(String translateWord, Foreignwords foreignwords,byte[] translateWordBytes) {
         this.translateWord = translateWord;
         this.foreignwords = foreignwords;
+        this.translateWordBytes=translateWordBytes;
     }
 
     public Long getID() {
@@ -52,5 +59,21 @@ public class Translation {
 
     public void setForeignwords(Foreignwords foreignwords) {
         this.foreignwords = foreignwords;
+    }
+
+    public byte[] getTranslateWordBytes() {
+        return translateWordBytes;
+    }
+
+    public void setTranslateWordBytes(byte[] translateWordBytes) {
+        this.translateWordBytes = translateWordBytes;
+    }
+
+    public String getTranslateWordLong() {
+        return translateWordLong;
+    }
+
+    public void setTranslateWordLong(String translateWordLong) {
+        this.translateWordLong = translateWordLong;
     }
 }

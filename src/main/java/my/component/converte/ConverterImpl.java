@@ -14,8 +14,9 @@ public class ConverterImpl implements Converter<Foreignwords,ForeignWordData> {
             foreignwords.setForeignWord(foreignWordData.getForeignWord());
         };
 
-        Translation translation=new Translation(foreignWordData.getTranslationWord(),foreignwords);
+        Translation translation=new Translation(foreignWordData.getTranslationWord(),foreignwords,(foreignWordData.getTranslationWord()!=null) ? foreignWordData.getTranslationWord().getBytes() : null);
         foreignwords.getTranslations().add(translation);
+        translation.setTranslateWordLong(foreignWordData.getTranslationWord());
         return foreignwords;
     }
 }
