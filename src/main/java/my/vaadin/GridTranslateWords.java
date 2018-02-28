@@ -6,6 +6,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.components.grid.SingleSelectionModel;
+import com.vaadin.ui.themes.ValoTheme;
 import my.form.binders.entities.ForeignWordTable;
 
 public class GridTranslateWords extends VerticalLayout implements View {
@@ -16,6 +17,7 @@ public class GridTranslateWords extends VerticalLayout implements View {
   public GridTranslateWords(MyUI myUI,Grid grid) {
     this.myUI=myUI;
     this.grid=grid;
+    this.grid.setStyleName(ValoTheme.TABLE_BORDERLESS);
     foreignWordForm = new ForeignWordForm(this.myUI);
     VerticalLayout verticalLayout = new VerticalLayout();
     grid.setColumns("ID", "foreign","translation");

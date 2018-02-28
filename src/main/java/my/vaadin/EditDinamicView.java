@@ -5,6 +5,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 import my.hibernate.entities.Foreignwords;
 import my.hibernate.entities.Translation;
 
@@ -18,6 +19,8 @@ public class EditDinamicView extends VerticalLayout implements View {
   private TextField textTranslatesArray[];
 
   public EditDinamicView(Foreignwords foreignwords, MyUI myUI) {
+    save.setStyleName(ValoTheme.BUTTON_SMALL);
+    cancel.setStyleName(ValoTheme.BUTTON_SMALL);
     this.myUI = myUI;
     textForeignWords.setValue(foreignwords.getForeignWord());
     textForeignWords.setId(String.valueOf(foreignwords.getID()));

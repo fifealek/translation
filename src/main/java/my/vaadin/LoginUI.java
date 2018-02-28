@@ -3,6 +3,7 @@ package my.vaadin;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 
 //@SpringUI
 //@Theme("valo1")
@@ -21,6 +22,9 @@ public class LoginUI extends VerticalLayout  implements View{
 
   protected void init() {
     setClickEvent();
+    //setStyleName(ValoTheme.BUTTON_FRIENDLY);
+    send.setStyleName(ValoTheme.BUTTON_SMALL);
+    registration.setStyleName(ValoTheme.BUTTON_SMALL);
     HorizontalLayout horizontalLayout=new HorizontalLayout();
     VerticalLayout verticalLayout = new VerticalLayout();
     verticalLayout.addComponent(login);

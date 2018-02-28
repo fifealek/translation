@@ -47,12 +47,12 @@ public class MyUI extends BaseUIWindow {
     protected void init(VaadinRequest request) {
          navigator = new Navigator(this, this);;
 
-        navigator.addView("Login",loginUI);
+        navigator.addView(Views.LOGIN.name(),loginUI);
         navigator.addView(Views.REGISTRATION.name(),registrationView);
         navigator.addView(Views.TRANSLATION.name(), gridTranslateWords);
         if(!isUserLoginIn(getCookie())){
            //navigator.addView("Login",loginUI);
-           navigator.navigateTo("Login");
+           navigator.navigateTo(Views.LOGIN.name());
             return;
         }else {
             updateGrid(null);

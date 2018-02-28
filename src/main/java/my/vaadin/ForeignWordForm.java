@@ -30,7 +30,8 @@ public class ForeignWordForm extends FormLayout {
         this.myUI = myUI;
         Collection<String> languages = getAllLanguages();
         setSizeUndefined();
-        buttonSave.setStyleName(ValoTheme.BUTTON_PRIMARY);
+        buttonSave.setStyleName(ValoTheme.BUTTON_SMALL);
+        buttonCancel.setStyleName(ValoTheme.BUTTON_SMALL);
         buttonCancel.setClickShortcut(ShortcutAction.KeyCode.ENTER);
         translationLanguage.setItems(languages.toArray(new String[languages.size()]));
         HorizontalLayout horizontalLayoutButtons = new HorizontalLayout();
